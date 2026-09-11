@@ -19,8 +19,8 @@ puts "Created #{Category.count} categories"
 # Sources
 sources_data = [
   # AI Tech
-  { name: "OpenAI Blog", url: "https://openai.com/blog/rss.xml", source_type: "rss", category_slug: "ai-tech" },
-  { name: "Anthropic News", url: "https://www.anthropic.com/rss.xml", source_type: "rss", category_slug: "ai-tech" },
+  { name: "OpenAI Blog", url: "https://openai.com/news/rss.xml", source_type: "rss", category_slug: "ai-tech" },
+  { name: "MIT News AI", url: "https://news.mit.edu/rss/topic/artificial-intelligence2", source_type: "rss", category_slug: "ai-tech" },
   { name: "Google AI Blog", url: "https://blog.google/technology/ai/rss/", source_type: "rss", category_slug: "ai-tech" },
   { name: "DeepMind Blog", url: "https://deepmind.google/blog/rss.xml", source_type: "rss", category_slug: "ai-tech" },
   { name: "Meta AI Blog", url: "https://ai.meta.com/blog/rss/", source_type: "rss", category_slug: "ai-tech" },
@@ -30,7 +30,7 @@ sources_data = [
 
   # Models & Releases
   { name: "Hugging Face Blog", url: "https://huggingface.co/blog/feed.xml", source_type: "rss", category_slug: "models" },
-  { name: "Hacker News", url: "https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT+OR+Claude+OR+LLaMA+OR+machine+learning&count=20", source_type: "rss", category_slug: "models" },
+  { name: "Hacker News", url: "https://hn.algolia.com/rss?query=AI", source_type: "rss", category_slug: "models" },
   { name: "r/LocalLLaMA", url: "https://www.reddit.com/r/LocalLLaMA/.rss", source_type: "rss", category_slug: "models" },
   { name: "r/MachineLearning", url: "https://www.reddit.com/r/MachineLearning/.rss", source_type: "rss", category_slug: "models" },
   { name: "The Verge AI", url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", source_type: "rss", category_slug: "models" },
