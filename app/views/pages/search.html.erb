@@ -1,0 +1,5 @@
+<% if @articles.size >= Pagination::PAGE_SIZE %>
+        <div class="flex justify-center mt-10">
+          <%= link_to "Load More", search_path(q: @query, page: params[:page].to_i + 1), class: "px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-gray-300 hover:text-white hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-all" %>
+        </div>
+      <% end %>

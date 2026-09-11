@@ -1,0 +1,8 @@
+# Sidekiq configuration
+:concurrency: 5
+:queues:
+  - default
+  - scraping
+  - sidekiq_cron
+:logfile: ./log/sidekiq.log
+:max_retries: 3

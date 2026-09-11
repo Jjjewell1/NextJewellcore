@@ -1,0 +1,160 @@
+<% content_for :title, "Next — AI News & Insights" %>
+<% content_for :description, "The hottest AI news, model releases, money-making opportunities, and tutorials. Updated hourly from 20+ curated sources." %>
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-indigo-600/20 via-violet-600/10 to-transparent p-8 sm:p-12 mb-12">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.15),transparent_50%)] pointer-events-none"></div>
+  <div class="relative z-10 max-w-3xl">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-xs font-semibold text-indigo-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+        Live Feed
+      </span>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-xs font-semibold text-violet-300">
+        Updated Hourly
+      </span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+      <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">AI News</span>
+      <span class="text-white/90">for the</span>
+      <span class="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">Future</span>
+    </h1>
+    <p class="text-gray-400 text-lg sm:text-xl leading-relaxed">
+      Hottest AI tech, model releases, money-making opportunities, and tutorials. Scraped from 20+ sources, curated for you — every hour.
+    </p>
+
+    <div class="flex flex-wrap items-center gap-4 mt-8">
+      <form action="<%= search_path %>" method="get" class="flex-1 sm:flex-none sm:min-w-[350px]">
+        <div class="relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="search" name="q" placeholder="Search across all AI news..." class="w-full pl-12 pr-4 py-3.5 bg-white/[0.06] border border-white/10 rounded-2xl text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all">
+        </div>
+      </form>
+      <%= link_to business_idea_path, class: "inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-semibold transition-all hover:scale-[1.02] shadow-lg shadow-emerald-500/25" do %>
+        <span>💡</span> Business Idea of the Day
+      <% end %>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-6 mt-10 max-w-md">
+      <div>
+        <p class="text-3xl font-bold text-white"><%= Article.count > 0 ? Article.count : "—" %></p>
+        <p class="text-xs text-gray-500 mt-1">Articles Scraped</p>
+      </div>
+      <div>
+        <p class="text-3xl font-bold text-white"><%= Article.where("scraped_at > ?", 24.hours.ago).count %></p>
+        <p class="text-xs text-gray-500 mt-1">Last 24 Hours</p>
+      </div>
+      <div>
+        <p class="text-3xl font-bold text-white"><%= Source.count %></p>
+        <p class="text-xs text-gray-500 mt-1">Sources Tracked</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+  <!-- Main content -->
+  <div class="lg:col-span-8">
+    <!-- Business Idea of the Day Banner -->
+    <% if @business_idea %>
+      <%= link_to business_idea_path, class: "group block rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent p-6 mb-10 hover:border-emerald-500/40 transition-all hover:shadow-xl hover:shadow-emerald-500/10" do %>
+        <div class="flex items-center justify-between mb-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-semibold text-emerald-300">💡 Business Idea of the Day</span>
+          <span class="text-xs text-emerald-400/60 group-hover:text-emerald-400 transition-colors">View all →</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold text-white group-hover:text-emerald-300 transition-colors mb-2"><%= @business_idea.title %></h3>
+        <p class="text-gray-400 text-sm line-clamp-2"><%= truncate(@business_idea.description, length: 160) %></p>
+        <div class="flex items-center gap-3 mt-4">
+          <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20"><%= @business_idea.difficulty_level %></span>
+          <span class="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-gray-400 border border-white/10"><%= @business_idea.category %></span>
+          <span class="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-gray-400 border border-white/10"><%= @business_idea.expected_income %></span>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- Latest Articles -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Latest AI News
+      </h2>
+      <span class="text-xs text-gray-500 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        Live
+      </span>
+    </div>
+
+    <!-- Featured Article (first one big) -->
+    <% if @featured_articles.any? %>
+      <% first = @featured_articles.first %>
+      <%= render "shared/article_hero", article: first %>
+      <% @featured_articles[1..].each { |a| render "shared/article_card", article: a } %>
+    <% elsif @recent_articles.any? %>
+      <% first = @recent_articles.first %>
+      <%= render "shared/article_hero", article: first %>
+    <% end %>
+
+    <!-- Article Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+      <% @recent_articles.drop(@featured_articles.any? ? @featured_articles.size : 1).each do |article| %>
+        <%= render "shared/article_card", article: article %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="lg:col-span-4 space-y-8">
+    <!-- Categories -->
+    <div class="rounded-3xl border border-white/5 bg-white/[0.02] p-6">
+      <h3 class="text-lg font-bold text-white mb-4">Categories</h3>
+      <div class="space-y-2">
+        <% @categories.each do |cat| %>
+          <%= link_to category_path(cat.slug), class: "flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors group" do %>
+            <span class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: <%= cat.color %>20; color: <%= cat.color %>"><%= cat.icon == "cpu" ? "⚙️" : cat.icon == "brain" ? "🧠" : cat.icon == "dollar-sign" ? "💰" : "📚" %></span>
+              <span class="text-sm font-medium text-gray-300 group-hover:text-white transition-colors"><%= cat.name %></span>
+            </span>
+            <span class="text-xs px-2 py-1 rounded-full bg-white/5 text-gray-400"><%= cat.articles.count %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Trending Topics -->
+    <div class="rounded-3xl border border-white/5 bg-white/[0.02] p-6">
+      <h3 class="text-lg font-bold text-white mb-4">Hot Right Now</h3>
+      <div class="flex flex-wrap gap-2">
+        <% ["GPT-5", "Claude", "Open Source", "AI Agents", "LLaMA", "Prompt Engineering", "AI Money", "RAG", "Fine-tuning", "AI Startups"].each do |tag| %>
+          <%= link_to search_path(q: tag), class: "px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-gray-400 hover:text-white hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-all" do %>
+            #<%= tag %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="rounded-3xl border border-white/5 bg-white/[0.02] p-6">
+      <h3 class="text-lg font-bold text-white mb-4">Top Sources</h3>
+      <div class="space-y-3">
+        <% Source.active.order(last_scraped_at: :desc).limit(6).each do |source| %>
+          <a href="<%= source.url %>" target="_blank" rel="noopener" class="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors group">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/30 to-purple-500/30 flex items-center justify-center flex-shrink-0">
+                <span class="text-xs font-bold text-indigo-300"><%= source.name.first(2).upcase %></span>
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-gray-300 group-hover:text-white truncate"><%= source.name %></p>
+                <p class="text-xs text-gray-600"><%= source.category.name %></p>
+              </div>
+            </div>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

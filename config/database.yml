@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
+  username: <%= ENV.fetch("POSTGRES_USER", "nextjewellcore") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "password") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "nextjewellcore_production") %>
+
+development:
+  <<: *default
+  database: nextjewellcore_development
+
+test:
+  <<: *default
+  database: nextjewellcore_test
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>

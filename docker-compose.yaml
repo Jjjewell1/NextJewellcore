@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    networks:
+      - default
+      - coolify
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
+      POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nextjewellcore}:${POSTGRES_PASSWORD:-nextjewellcore}@postgres:5432/${POSTGRES_DB:-nextjewellcore_production}
+      REDIS_URL: redis://redis:6379/0
+      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_SERVE_STATIC_FILES: "true"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.next.rule=Host(`next.jewellcore.com`)
+      - traefik.http.routers.next.entrypoints=http
+      - traefik.http.services.next.loadbalancer.server.port=3000
+    depends_on:
+      - postgres
+      - redis
+      - sidekiq
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    restart: unless-stopped
+    networks:
+      - default
+      - coolify
+    environment:
+      RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
+      POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nextjewellcore}:${POSTGRES_PASSWORD:-nextjewellcore}@postgres:5432/${POSTGRES_DB:-nextjewellcore_production}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
+      POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - default
+      - coolify
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nextjewellcore}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - default
+      - coolify
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  coolify:
+    external: true
