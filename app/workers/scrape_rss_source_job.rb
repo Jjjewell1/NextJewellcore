@@ -18,7 +18,7 @@ class ScrapeRssSourceJob
 
       Article.create!(
         title: entry.title.to_s.strip,
-        summary: sanitize(entry.summary || entry.description || ""),
+        summary: sanitize(entry.summary || entry.content || ""),
         content: entry.content || entry.summary || "",
         url: entry.url,
         image_url: extract_image(entry),

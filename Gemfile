@@ -25,6 +25,9 @@ gem "mechanize", "~> 2.10"
 # Background jobs
 gem "sidekiq", "~> 7.3"
 gem "sidekiq-cron", "~> 1.12"
+# Pin below 3.0: sidekiq 7.3.9's scheduler calls TimedStack#pop(positional),
+# which connection_pool 3.0 changed to keyword-only args, crashing the cron poller thread.
+gem "connection_pool", "~> 2.4"
 
 # Search
 gem "pg_search", "~> 2.3"
