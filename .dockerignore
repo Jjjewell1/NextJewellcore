@@ -12,5 +12,4 @@ app/assets/builds
 README.md
 Dockerfile
 docker-compose.yaml
-docker-entrypoint.sh
 Gemfile.lock
