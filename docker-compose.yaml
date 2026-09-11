@@ -15,7 +15,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
       POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-nextjewellcore}:${POSTGRES_PASSWORD:-nextjewellcore}@postgres:5432/${POSTGRES_DB:-nextjewellcore_production}
       REDIS_URL: redis://redis:6379/0
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
@@ -49,7 +48,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
       POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-nextjewellcore}:${POSTGRES_PASSWORD:-nextjewellcore}@postgres:5432/${POSTGRES_DB:-nextjewellcore_production}
       REDIS_URL: redis://redis:6379/0
     depends_on:
       - postgres

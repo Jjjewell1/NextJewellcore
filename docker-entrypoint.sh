@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-echo "==> Running database migrations..."
-bundle exec rails db:prepare 2>/dev/null || bundle exec rails db:migrate
+echo "==> Preparing database..."
+bundle exec ruby bin/rails db:prepare
 
-echo "==> Seeding initial data if missing..."
-bundle exec rails db:seed
+echo "==> Seeding initial data..."
+bundle exec ruby bin/rails db:seed
 
 echo "==> Starting application..."
 exec "$@"

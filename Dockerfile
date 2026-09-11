@@ -25,9 +25,11 @@ RUN npm install --no-save 2>/dev/null || true
 
 COPY . .
 
+RUN chmod +x bin/rails bin/rake
+
 # Compile Tailwind CSS (app/assets/builds/tailwind.css) + fingerprint JS/CSS
-RUN bundle exec rails tailwindcss:build \
- && bundle exec rails assets:precompile
+RUN ./bin/rails tailwindcss:build
+RUN ./bin/rails assets:precompile
 
 # =============================================================================
 # ---------------- Stage 2: Runtime ----------------
@@ -49,9 +51,10 @@ COPY --from=assets /usr/local/bundle /usr/local/bundle
 COPY --from=assets /app /app
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+ && chmod +x /app/bin/rails /app/bin/rake
 
 EXPOSE 3000
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["bundle", "exec", "puma", "-p", "3000", "-e", "production", "-b", "tcp://0.0.0.0:3000"]
+CMD ["bundle", "exec", "puma", "-p", "3000", "-e", "production"]

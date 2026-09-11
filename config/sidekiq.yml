@@ -4,5 +4,5 @@
   - default
   - scraping
   - sidekiq_cron
-:logfile: ./log/sidekiq.log
 :max_retries: 3
+:logfile: nil
