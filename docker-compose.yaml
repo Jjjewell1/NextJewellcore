@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   web:
     build: .
@@ -15,7 +13,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
       POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://:${REDIS_PASSWORD:-nextjewellcorepwd}@redis:6379/0
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
     labels:
@@ -48,7 +46,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-nextjewellcore}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nextjewellcore}
       POSTGRES_DB: ${POSTGRES_DB:-nextjewellcore_production}
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://:${REDIS_PASSWORD:-nextjewellcorepwd}@redis:6379/0
     depends_on:
       - postgres
       - redis
@@ -78,14 +76,14 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-nextjewellcorepwd}
     volumes:
       - redis-data:/data
     networks:
       - default
       - coolify
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-nextjewellcorepwd}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5

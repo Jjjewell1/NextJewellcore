@@ -1,1 +1,33 @@
-<time datetime="<%= article.published_at.strftime('%Y-%m-%d') if article.published_at %>" class="flex-shrink-0"><%= format_date(article.published_at) %></time>
+<%= link_to article_path(article), class: "group block rounded-3xl border border-white/5 bg-white/[0.02] overflow-hidden hover:border-indigo-500/30 transition-all hover:shadow-2xl hover:shadow-indigo-500/10 relative" do %>
+  <div class="relative h-44 overflow-hidden">
+    <% if article.image_url.present? %>
+      <img src="<%= article.image_url %>" alt="<%= article.title %>" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.style.display='none'">
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-transparent to-transparent"></div>
+    <% else %>
+      <div class="w-full h-full bg-gradient-to-br from-indigo-600/30 via-violet-600/20 to-purple-600/30 flex items-center justify-center">
+        <svg class="w-10 h-10 text-indigo-400/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+    <% end %>
+    <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-semibold backdrop-blur-md" style="background: <%= article.category.color %>22; color: <%= article.category.color %>; border: 1px solid <%= article.category.color %>33"><%= article.category.name %></span>
+  </div>
+
+  <div class="p-5">
+    <h3 class="text-base font-bold text-white leading-snug mb-2 group-hover:text-indigo-300 transition-colors line-clamp-2"><%= article.title %></h3>
+    <% if article.summary.present? %>
+      <p class="text-gray-400 text-sm line-clamp-3 mb-4"><%= truncate(article.summary, length: 240) %></p>
+    <% end %>
+    <div class="flex items-center justify-between text-sm text-gray-500">
+      <span class="flex items-center gap-2 min-w-0">
+        <span class="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500/40 to-purple-500/40 flex items-center justify-center flex-shrink-0">
+          <span class="text-[9px] font-bold text-indigo-300"><%= article.source.name.first(2).upcase %></span>
+        </span>
+        <span class="truncate"><%= article.source.name %></span>
+      </span>
+      <% if article.published_at %>
+        <time datetime="<%= article.published_at.strftime('%Y-%m-%d') %>" class="flex-shrink-0"><%= format_date(article.published_at) %></time>
+      <% end %>
+    </div>
+  </div>
+<% end %>

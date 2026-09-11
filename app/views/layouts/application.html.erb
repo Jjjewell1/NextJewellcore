@@ -1,2 +1,51 @@
-<%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= content_for?(:title) ? yield(:title) : "Next — AI News & Insights" %></title>
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "The hottest AI news, model releases, money-making opportunities, and tutorials. Updated hourly from 20+ curated sources." %>">
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen bg-[#07070d] text-gray-100 antialiased flex flex-col">
+  <header class="sticky top-0 z-50 border-b border-white/5 bg-[#07070d]/80 backdrop-blur-xl">
+    <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <%= link_to root_path, class: "flex items-center gap-2.5" do %>
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-black text-white shadow-lg shadow-indigo-500/25">N</span>
+            <span class="text-lg font-bold tracking-tight">
+              <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">Next</span>
+            </span>
+          <% end %>
+        </div>
+        <div class="flex items-center gap-1">
+          <%= link_to "Home", root_path, class: "px-3 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all" %>
+          <%= link_to business_idea_path, class: "px-3 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all" do %>
+            💡 Business Idea
+          <% end %>
+          <%= link_to search_path, class: "px-3 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all" do %>
+            🔍 Search
+          <% end %>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 py-8">
+    <%= yield %>
+  </main>
+
+  <footer class="border-t border-white/5 mt-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-gray-500">
+          <span class="font-semibold text-gray-400">Next</span> · AI News & Insights · Updated hourly
+        </p>
+        <p class="text-xs text-gray-600">Curated from 20+ trusted sources. Content belongs to original publishers.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
