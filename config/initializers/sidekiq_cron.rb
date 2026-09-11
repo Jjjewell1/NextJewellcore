@@ -14,6 +14,10 @@ if ENV["REDIS_URL"].present? && defined?(Sidekiq::Cron)
         "generate_business_idea" => {
           "cron" => "30 6 * * *",
           "class" => "GenerateBusinessIdeaWorker"
+        },
+        "send_daily_digest" => {
+          "cron" => "30 7 * * *",
+          "class" => "SendDailyDigestWorker"
         }
       }
     )
