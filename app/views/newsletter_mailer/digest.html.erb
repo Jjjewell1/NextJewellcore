@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Today in AI</title>
+  </head>
+  <body style="margin:0;padding:0;background:#07070d;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#e5e7eb;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#07070d;">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#0b0b16;border:1px solid #1f1f2e;border-radius:16px;overflow:hidden;">
+            <tr>
+              <td style="padding:28px 32px;border-bottom:1px solid #1f1f2e;">
+                <p style="margin:0;font-size:20px;font-weight:800;color:#ffffff;">
+                  <span style="color:#818cf8;">Next</span> — Today in AI
+                </p>
+                <p style="margin:6px 0 0;font-size:13px;color:#9ca3af;">
+                  <%= Date.current.strftime("%A, %B %d, %Y") %> · Your daily briefing
+                </p>
+              </td>
+            </tr>
+
+            <% if idea.present? %>
+            <tr>
+              <td style="padding:28px 32px;border-bottom:1px solid #1f1f2e;background:#0a1410;">
+                <p style="margin:0;font-size:12px;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:0.08em;">
+                  💡 Business Idea of the Day
+                </p>
+                <p style="margin:12px 0 0;font-size:22px;font-weight:800;color:#ffffff;line-height:1.3;">
+                  <%= idea.title %>
+                </p>
+                <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#d1d5db;">
+                  <%= idea.description %>
+                </p>
+                <p style="margin:12px 0 0;font-size:13px;color:#9ca3af;">
+                  <%= idea.difficulty_level %> · <%= idea.category %> · <%= idea.expected_income %>
+                </p>
+                <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+                  <tr>
+                    <td>
+                      <a href="<%= base_url %>/business-idea" style="display:inline-block;padding:11px 22px;background:linear-gradient(90deg,#10b981,#14b8a6);color:#06281c;font-size:13px;font-weight:700;text-decoration:none;border-radius:10px;">
+                        Read the full plan
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <% end %>
+
+            <tr>
+              <td style="padding:28px 32px;">
+                <p style="margin:0;font-size:12px;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;">
+                  Top AI stories — last 24 hours
+                </p>
+                <% if articles.present? %>
+                  <% articles.each do |article| %>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+                      <tr>
+                        <td style="padding:14px 16px;background:#ffffff06;border:1px solid #1f1f2e;border-radius:12px;">
+                          <p style="margin:0 0 4px;">
+                            <a href="<%= article.url %>" style="color:#e5e7eb;font-size:14px;font-weight:600;text-decoration:none;">
+                              <%= article.title %>
+                            </a>
+                          </p>
+                          <p style="margin:0;font-size:12px;color:#9ca3af;">
+                            <%= article.source.name %> · <%= article.published_at&.strftime("%b %d") %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  <% end %>
+                <% else %>
+                  <p style="margin:16px 0 0;font-size:13px;color:#9ca3af;">Fresh stories on the way — check back later.</p>
+                <% end %>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 32px;border-top:1px solid #1f1f2e;">
+                <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.7;">
+                  You're getting this because you subscribed at <%= base_url %>.<br>
+                  <a href="<%= unsubscribe_url %>" style="color:#6b7280;text-decoration:underline;">Unsubscribe</a> · 
+                  <a href="<%= base_url %>" style="color:#6b7280;text-decoration:underline;">Browse next.jewellcore.com</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

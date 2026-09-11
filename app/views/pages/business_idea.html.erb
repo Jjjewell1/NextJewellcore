@@ -1,5 +1,9 @@
 <% content_for :title, "#{@idea&.title || 'Business Ideas'} — Next: AI for Money" %>
 <% content_for :description, "A fresh, feasible, low-cost business idea every day — crafted from today's hottest AI trends and news." %>
+<% @idea_url = @idea ? "#{request.base_url}#{business_idea_path(date: @idea.idea_date)}" : nil %>
+<% content_for :og_title, "#{@idea&.title || 'Business Ideas'} — Next: AI for Money" %>
+<% content_for :og_description, truncate(@idea&.description.to_s, length: 160) %>
+<% content_for :og_url, (@idea_url || request.original_url) %>
 
 <!-- Hero: Business Idea of the Day -->
 <section class="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-600/15 via-teal-500/10 to-transparent p-8 sm:p-12 mb-10">
@@ -34,9 +38,41 @@
         </span>
       </div>
 
+      <% if @idea.trends_list.any? %>
+        <div class="flex flex-wrap items-center gap-2 mb-6">
+          <span class="text-xs text-gray-500 mr-1">Driven by:</span>
+          <% @idea.trends_list.first(4).each do |trend| %>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-xs font-medium">
+              📈 <span><%= trend %></span>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+
       <p class="text-gray-300 text-lg sm:text-xl leading-relaxed max-w-3xl">
         <%= @idea.description %>
       </p>
+
+      <!-- Vote & share -->
+      <div class="max-w-3xl mt-6 flex flex-wrap items-center gap-4">
+        <div class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.02] p-1">
+          <button type="button" data-vote-id="<%= @idea.id %>" data-vote-value="1"
+                  class="vote-btn px-3 py-1.5 rounded-full text-sm text-gray-300 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all" title="Great idea">
+            👍
+          </button>
+          <button type="button" data-vote-id="<%= @idea.id %>" data-vote-value="-1"
+                  class="vote-btn px-3 py-1.5 rounded-full text-sm text-gray-300 hover:text-red-300 hover:bg-red-500/10 transition-all" title="Not for me">
+            👎
+          </button>
+          <span data-vote-count class="px-2 text-sm font-semibold text-gray-200"><%= @idea.net_votes %></span>
+        </div>
+        <div class="inline-flex items-center gap-2">
+          <span class="text-xs text-gray-500">Share</span>
+          <%= link_to "𝕏", "https://twitter.com/intent/tweet?text=#{u(@idea.title)}&url=#{u(@idea_url)}", target: "_blank", rel: "noopener", class: "px-3 py-1.5 rounded-full text-sm text-gray-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all" %>
+          <%= link_to "LinkedIn", "https://www.linkedin.com/sharing/share-offsite/?url=#{u(@idea_url)}", target: "_blank", rel: "noopener", class: "px-3 py-1.5 rounded-full text-sm text-gray-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all" %>
+          <%= link_to "WhatsApp", "https://wa.me/?text=#{u("#{@idea.title} — #{@idea_url}")}", target: "_blank", rel: "noopener", class: "px-3 py-1.5 rounded-full text-sm text-gray-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all" %>
+        </div>
+      </div>
 
       <!-- How to start -->
       <div class="mt-8 max-w-3xl">
@@ -60,6 +96,30 @@
         </div>
       </div>
 
+      <!-- 30-Day Game Plan -->
+      <% if @idea.game_plan.present? %>
+        <div class="mt-8 max-w-3xl">
+          <h2 class="text-lg font-bold text-emerald-300 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Your 30-Day Game Plan
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <% @idea.game_plan.to_s.split("\n").each_with_index do |line, i| %>
+              <% week = line.match(/\AWeek\s+(\d+)\s*[-—–]\s*(.+?):\s*(.*)\z/i) %>
+              <div class="rounded-2xl border border-white/5 bg-[#0a0a14]/60 p-5 flex gap-4">
+                <span class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm font-bold flex items-center justify-center flex-shrink-0"><%= week ? "W#{week[1]}" : (i + 1) %></span>
+                <div>
+                  <p class="text-xs uppercase tracking-wider text-emerald-300 font-semibold mb-1"><%= week ? week[2] : "Step" %></p>
+                  <p class="text-sm text-gray-300 leading-relaxed"><%= week ? week[3] : line %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
       <!-- Tools & Income -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 max-w-3xl">
         <div class="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
@@ -71,6 +131,18 @@
           <p class="text-sm text-gray-400 leading-relaxed"><%= @idea.expected_income %></p>
         </div>
       </div>
+
+      <!-- AI Starter Prompt -->
+      <% if @idea.starter_prompt.present? %>
+        <div class="mt-8 max-w-3xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">🤖 AI Starter Prompt</h3>
+            <button type="button" data-copy-target="#starter-prompt" class="copy-btn text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-emerald-500/40 transition-all">Copy prompt</button>
+          </div>
+          <pre id="starter-prompt" class="rounded-2xl border border-indigo-500/20 bg-[#0a0a14] p-5 text-xs leading-relaxed text-gray-400 whitespace-pre-wrap"><%= @idea.starter_prompt %></pre>
+          <p class="text-xs text-gray-600 mt-3">Paste this into ChatGPT, Claude, or any AI assistant to get a full build plan, pricing, risks, and outreach copy.</p>
+        </div>
+      <% end %>
 
       <!-- Source articles -->
       <% if @idea.source_articles.any? %>

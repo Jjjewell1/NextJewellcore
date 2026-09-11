@@ -46,6 +46,13 @@ class PagesController < ApplicationController
             end
     @recent_ideas = BusinessIdea.recent.limit(6)
     @category_counts = Category.left_joins(:articles).group(:slug).count(:articles)
+
+    @idea&.increment_views!
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
   rescue Date::Error
     redirect_to business_idea_path
   end

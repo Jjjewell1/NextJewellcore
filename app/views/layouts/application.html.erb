@@ -5,8 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= content_for?(:title) ? yield(:title) : "Next — AI News & Insights" %></title>
   <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "The hottest AI news, model releases, money-making opportunities, and tutorials. Updated hourly from 20+ curated sources." %>">
+  <% if content_for?(:og_title) %>
+    <meta property="og:site_name" content="Next — AI for Money">
+    <meta property="og:title" content="<%= yield(:og_title) %>">
+    <meta property="og:description" content="<%= yield(:og_description) %>">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<%= yield(:og_url) %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= yield(:og_title) %>">
+    <meta name="twitter:description" content="<%= yield(:og_description) %>">
+  <% end %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
+  <%= csrf_meta_tags %>
 </head>
 <body class="min-h-screen bg-[#07070d] text-gray-100 antialiased flex flex-col">
   <header class="sticky top-0 z-50 border-b border-white/5 bg-[#07070d]/80 backdrop-blur-xl">
